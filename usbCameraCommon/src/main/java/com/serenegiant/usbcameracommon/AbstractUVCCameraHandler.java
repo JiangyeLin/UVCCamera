@@ -522,12 +522,12 @@ abstract class AbstractUVCCameraHandler extends Handler {
 				// the file name is came from current time.
 				// You should use extension name as same as CompressFormat when calling Bitmap#compress.
 				final File outputFile = TextUtils.isEmpty(path)
-					? MediaMuxerWrapper.getCaptureFile(Environment.DIRECTORY_DCIM, ".png")
+					? MediaMuxerWrapper.getCaptureFile(Environment.DIRECTORY_DCIM, ".jpg")
 					: new File(path);
 				final BufferedOutputStream os = new BufferedOutputStream(new FileOutputStream(outputFile));
 				try {
 					try {
-						bitmap.compress(Bitmap.CompressFormat.PNG, 100, os);
+						bitmap.compress(Bitmap.CompressFormat.JPEG, 100, os);
 						os.flush();
 						mHandler.sendMessage(mHandler.obtainMessage(MSG_MEDIA_UPDATE, outputFile.getPath()));
 					} catch (final IOException e) {
