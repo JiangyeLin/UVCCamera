@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/UVCCamera.iml" filepath="$PROJECT_DIR$/UVCCamera.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/demo/UVCCamera.demo.iml" filepath="$PROJECT_DIR$/.idea/modules/demo/UVCCamera.demo.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/libuvccamera/UVCCamera.libuvccamera.iml" filepath="$PROJECT_DIR$/.idea/modules/libuvccamera/UVCCamera.libuvccamera.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/usbCameraCommon/UVCCamera.usbCameraCommon.iml" filepath="$PROJECT_DIR$/.idea/modules/usbCameraCommon/UVCCamera.usbCameraCommon.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/usbCameraTest/UVCCamera.usbCameraTest.iml" filepath="$PROJECT_DIR$/.idea/modules/usbCameraTest/UVCCamera.usbCameraTest.iml" />

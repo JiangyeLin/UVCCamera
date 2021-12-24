@@ -64,7 +64,7 @@ import java.nio.ByteOrder;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
-abstract class AbstractUVCCameraHandler extends Handler {
+public abstract class AbstractUVCCameraHandler extends Handler {
 	private static final boolean DEBUG = true;	// TODO set false on release
 	private static final String TAG = "AbsUVCCameraHandler";
 
@@ -837,4 +837,23 @@ abstract class AbstractUVCCameraHandler extends Handler {
 			}
 		}
 	}
+
+
+    public static OnEncodeResultListener mListener;
+    public static OnPreViewResultListener mPreviewListener;
+    public static OnCaptureListener mCaptureListener;
+
+    public interface OnEncodeResultListener {
+        void onEncodeResult(byte[] data, int offset, int length, long timestamp, int type);
+
+        void onRecordResult(String videoPath);
+    }
+
+    public interface OnPreViewResultListener {
+        void onPreviewResult(byte[] data);
+    }
+
+    public interface OnCaptureListener {
+        void onCaptureResult(String picPath);
+    }
 }
