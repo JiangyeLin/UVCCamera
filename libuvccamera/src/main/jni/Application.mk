@@ -17,16 +17,17 @@
 # *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # *  See the License for the specific language governing permissions and
 # *  limitations under the License.
-# * 
+# *
 # * All files in the folder are under this Apache License, Version 2.0.
 # * Files in the jni/libjpeg, jni/libusb, jin/libuvc, jni/rapidjson folder may have a different license, see the respective files.
 #*/
 
 # This is just for mips, if you really needs MSA, un-comment and build with GCC.
 # Note: Supporting GCC on NDK is already deprecated and GCC will be removed from NDK soon.
-#NDK_TOOLCHAIN_VERSION := 4.9
+NDK_TOOLCHAIN_VERSION := 4.9
 
 APP_PLATFORM := android-14
-APP_ABI := armeabi armeabi-v7a x86 mips
+#APP_ABI := armeabi armeabi-v7a x86 mips
+APP_ABI := armeabi-v7a
 #APP_OPTIM := debug
 APP_OPTIM := release
