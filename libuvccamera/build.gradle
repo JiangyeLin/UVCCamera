@@ -108,7 +108,7 @@ afterEvaluate {
                 artifact generateSourcesJar
                 groupId = 'com.laundri.lib'
                 artifactId = 'uvccamera'
-                version = '1.0.0-beta1'
+                version = '1.0.1'
             }
         }
 
