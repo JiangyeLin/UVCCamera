@@ -1,4 +1,5 @@
 apply plugin: 'com.android.library'
+apply plugin: 'maven-publish'
 /*
  *  UVCCamera
  *  library and sample to access to UVC web camera on non-rooted Android device
@@ -34,7 +35,7 @@ android {
     }
 
     defaultConfig {
-        minSdkVersion 14
+        minSdkVersion 18
         targetSdkVersion versionTarget
     }
 
@@ -89,7 +90,49 @@ dependencies {
     implementation "com.android.support:support-v4:${supportLibVersion}"
     implementation "com.android.support:support-annotations:${supportLibVersion}"
 
-    implementation("com.serenegiant:common:${commonLibVersion}") {
+    api("com.serenegiant:common:${commonLibVersion}") {
         exclude module: 'support-v4'
     }
+}
+
+
+/**
+ * maven仓库发布脚本
+ */
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+                // 上传source，这样使用放可以看到方法注释
+                artifact generateSourcesJar
+                groupId = 'com.laundri.lib'
+                artifactId = 'uvccamera'
+                version = '1.0.0-beta1'
+            }
+        }
+
+        repositories {
+            maven {
+                //这个name只是用来标识，爱怎么叫怎么叫
+                name "local"
+
+                //url表示maven打包输出的目录
+                url "../repo"
+            }
+        }
+
+        //对应maven仓库项目地址，根据实际情况配置
+        repositories {
+            maven {
+                name "repo"
+                url "C:\\Users\\JiangyeLin\\AndroidStudioProjects\\maven-repo"
+            }
+        }
+    }
+}
+
+task generateSourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier 'sources'
 }

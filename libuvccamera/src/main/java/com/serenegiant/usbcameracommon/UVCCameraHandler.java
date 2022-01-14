@@ -24,15 +24,14 @@
 package com.serenegiant.usbcameracommon;
 
 import android.app.Activity;
-import android.view.Surface;
 
-import com.serenegiant.glutils.RendererHolder;
 import com.serenegiant.usb.UVCCamera;
 import com.serenegiant.widget.CameraViewInterface;
 
-public class UVCCameraHandlerMultiSurface extends AbstractUVCCameraHandler {
+public class UVCCameraHandler extends AbstractUVCCameraHandler {
+
     /**
-     * create UVCCameraHandlerMultiSurface, use MediaVideoEncoder, try MJPEG, default bandwidth
+     * create UVCCameraHandler, use MediaVideoEncoder, try MJPEG, default bandwidth
      *
      * @param parent
      * @param cameraView
@@ -40,7 +39,7 @@ public class UVCCameraHandlerMultiSurface extends AbstractUVCCameraHandler {
      * @param height
      * @return
      */
-    public static final UVCCameraHandlerMultiSurface createHandler(
+    public static final UVCCameraHandler createHandler(
             final Activity parent, final CameraViewInterface cameraView,
             final int width, final int height) {
 
@@ -48,7 +47,7 @@ public class UVCCameraHandlerMultiSurface extends AbstractUVCCameraHandler {
     }
 
     /**
-     * create UVCCameraHandlerMultiSurface, use MediaVideoEncoder, try MJPEG
+     * create UVCCameraHandler, use MediaVideoEncoder, try MJPEG
      *
      * @param parent
      * @param cameraView
@@ -57,7 +56,7 @@ public class UVCCameraHandlerMultiSurface extends AbstractUVCCameraHandler {
      * @param bandwidthFactor
      * @return
      */
-    public static final UVCCameraHandlerMultiSurface createHandler(
+    public static final UVCCameraHandler createHandler(
             final Activity parent, final CameraViewInterface cameraView,
             final int width, final int height, final float bandwidthFactor) {
 
@@ -65,16 +64,16 @@ public class UVCCameraHandlerMultiSurface extends AbstractUVCCameraHandler {
     }
 
     /**
-     * create UVCCameraHandlerMultiSurface, try MJPEG, default bandwidth
+     * create UVCCameraHandler, try MJPEG, default bandwidth
      *
      * @param parent
      * @param cameraView
-     * @param encoderType
+     * @param encoderType 0: use MediaSurfaceEncoder, 1: use MediaVideoEncoder, 2: use MediaVideoBufferEncoder
      * @param width
      * @param height
      * @return
      */
-    public static final UVCCameraHandlerMultiSurface createHandler(
+    public static final UVCCameraHandler createHandler(
             final Activity parent, final CameraViewInterface cameraView,
             final int encoderType, final int width, final int height) {
 
@@ -82,17 +81,17 @@ public class UVCCameraHandlerMultiSurface extends AbstractUVCCameraHandler {
     }
 
     /**
-     * create UVCCameraHandlerMultiSurface, default bandwidth
+     * create UVCCameraHandler, default bandwidth
      *
      * @param parent
      * @param cameraView
-     * @param encoderType
+     * @param encoderType 0: use MediaSurfaceEncoder, 1: use MediaVideoEncoder, 2: use MediaVideoBufferEncoder
      * @param width
      * @param height
-     * @param format
+     * @param format      either UVCCamera.FRAME_FORMAT_YUYV(0) or UVCCamera.FRAME_FORMAT_MJPEG(1)
      * @return
      */
-    public static final UVCCameraHandlerMultiSurface createHandler(
+    public static final UVCCameraHandler createHandler(
             final Activity parent, final CameraViewInterface cameraView,
             final int encoderType, final int width, final int height, final int format) {
 
@@ -100,7 +99,7 @@ public class UVCCameraHandlerMultiSurface extends AbstractUVCCameraHandler {
     }
 
     /**
-     * create UVCCameraHandlerMultiSurface
+     * create UVCCameraHandler
      *
      * @param parent
      * @param cameraView
@@ -111,76 +110,54 @@ public class UVCCameraHandlerMultiSurface extends AbstractUVCCameraHandler {
      * @param bandwidthFactor
      * @return
      */
-    public static final UVCCameraHandlerMultiSurface createHandler(
+    public static final UVCCameraHandler createHandler(
             final Activity parent, final CameraViewInterface cameraView,
             final int encoderType, final int width, final int height, final int format, final float bandwidthFactor) {
 
-        final CameraThread thread = new CameraThread(UVCCameraHandlerMultiSurface.class, parent, cameraView, encoderType, width, height, format, bandwidthFactor);
+        final CameraThread thread = new CameraThread(UVCCameraHandler.class, parent, cameraView, encoderType, width, height, format, bandwidthFactor);
         thread.start();
-        return (UVCCameraHandlerMultiSurface) thread.getHandler();
+        return (UVCCameraHandler) thread.getHandler();
     }
 
-    private RendererHolder mRendererHolder;
-
-    protected UVCCameraHandlerMultiSurface(final CameraThread thread) {
+    protected UVCCameraHandler(final CameraThread thread) {
         super(thread);
-        mRendererHolder = new RendererHolder(thread.getWidth(), thread.getHeight(), null);
     }
 
-    public synchronized void release() {
-        if (mRendererHolder != null) {
-            mRendererHolder.release();
-            mRendererHolder = null;
-        }
-        super.release();
-    }
-
-    public synchronized void resize(final int width, final int height) {
-        super.resize(width, height);
-        if (mRendererHolder != null) {
-            mRendererHolder.resize(width, height);
-        }
-    }
-
-    public synchronized void startPreview() {
-        checkReleased();
-        if (mRendererHolder != null) {
-            super.startPreview(mRendererHolder.getSurface());
-        } else {
-            throw new IllegalStateException();
-        }
-    }
-
-    public synchronized void addSurface(final int surfaceId, final Surface surface, final boolean isRecordable) {
-        checkReleased();
-        mRendererHolder.addSurface(surfaceId, surface, isRecordable);
-    }
-
-    public synchronized void removeSurface(final int surfaceId) {
-        if (mRendererHolder != null) {
-            mRendererHolder.removeSurface(surfaceId);
-        }
+    @Override
+    public void startPreview(final Object surface) {
+        super.startPreview(surface);
     }
 
     @Override
     public void captureStill() {
-        checkReleased();
         super.captureStill();
     }
 
     @Override
     public void captureStill(final String path) {
-        checkReleased();
-        post(new Runnable() {
-            @Override
-            public void run() {
-                synchronized (UVCCameraHandlerMultiSurface.this) {
-                    if (mRendererHolder != null) {
-                        mRendererHolder.captureStill(path);
-                        updateMedia(path);
-                    }
-                }
-            }
-        });
+        super.captureStill(path);
+    }
+
+    public void captureStill(String path, OnCaptureListener onCaptureListener) {
+        mCaptureListener = onCaptureListener;
+        super.captureStill(path);
+    }
+
+
+    // 对外回调接口
+    public interface CameraCallback {
+        public void onOpen();
+
+        public void onClose();
+
+        public void onStartPreview();
+
+        public void onStopPreview();
+
+        public void onStartRecording();
+
+        public void onStopRecording();
+
+        public void onError(final Exception e);
     }
 }

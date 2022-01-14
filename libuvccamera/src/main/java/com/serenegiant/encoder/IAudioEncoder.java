@@ -21,38 +21,7 @@
  *  may have a different license, see the respective files.
  */
 
-apply plugin: 'com.android.library'
+package com.serenegiant.encoder;
 
-android {
-    compileSdkVersion versionCompiler
-   	buildToolsVersion versionBuildTool
-
-   	compileOptions {
-   		sourceCompatibility javaSourceCompatibility
-   		targetCompatibility javaTargetCompatibility
-   	}
-
-    defaultConfig {
-        minSdkVersion 18
-        targetSdkVersion versionTarget
-
-    }
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
-}
-
-dependencies {
-	api fileTree(dir: 'libs', include: ['*.jar'])
-
-	implementation "com.android.support:support-v4:${supportLibVersion}"
-	implementation "com.android.support:support-annotations:${supportLibVersion}"
-
-	implementation("com.serenegiant:common:${commonLibVersion}") {
-   		exclude module: 'support-v4'
-   	}
-	//implementation project(':libuvccamera')
+public interface IAudioEncoder {
 }
